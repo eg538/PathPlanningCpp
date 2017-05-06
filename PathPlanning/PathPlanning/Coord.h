@@ -8,6 +8,7 @@ class Coord
 public:
 	Coord();
 	~Coord();
+	Coord(float xcoords, float ycoords);
 
 	float x;
 	float y;

@@ -13,6 +13,7 @@ class Grid
 public:
 	Grid();
 	~Grid();
+	Grid(float w, float h, float scal, float startx, float starty);
 
 	int nheight;
 	float height;
@@ -27,7 +28,7 @@ public:
 
 	vector<Coord> adjCoords(int x, int y);
 
-	array<int, 2> intPos(float x, float y);
+	vector<int> intPos(float x, float y);
 };
 
 #endif

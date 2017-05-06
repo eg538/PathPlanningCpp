@@ -16,6 +16,7 @@ private:
 public:
 	Dijkstra();
 	~Dijkstra();
+	Dijkstra(float x, float y);
 
 	Path calcPath(Grid g);
 

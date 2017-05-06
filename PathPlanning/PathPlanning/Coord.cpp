@@ -11,6 +11,10 @@ Coord::~Coord()
 {
 }
 
+Coord::Coord(float xcoords, float ycoords)
+{
+}
+
 void Coord::setObst(bool val)
 {
 }
