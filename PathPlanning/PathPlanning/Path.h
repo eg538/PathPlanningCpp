@@ -2,6 +2,7 @@
 #define PATH_H
 
 #include <vector>
+#include "Coord.h"
 
 using namespace std;
 

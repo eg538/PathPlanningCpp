@@ -21,7 +21,7 @@ public:
 	float width;
 	float scale;
 	Coord R2Pos;
-	Coord* map;
+	vector<vector<Coord>> map;
 	vector<Obstacle> obstacles;
 
 	void addObstacles(Obstacle obst);
@@ -29,6 +29,10 @@ public:
 	vector<Coord> adjCoords(int x, int y);
 
 	vector<int> intPos(float x, float y);
+
+	float distance(Coord a, Coord b);
+
+	void updatePos(float x, float y);
 };
 
 #endif
