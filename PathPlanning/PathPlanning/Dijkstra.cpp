@@ -77,7 +77,6 @@ Path Dijkstra::calcPath(Grid *gri)
 		}
 	}
 	head = queue.top();
-	cout << "Exited calcPath method" << endl;
 	return givePath(&g);
 }
 
@@ -97,7 +96,6 @@ Path Dijkstra::givePath(Grid *grid)
 		for (vector<int> child : neighbors) {
 			xCC = child[0];
 			yCC = child[1];
-			cout << abs(g.map[xCC][yCC].d - abs(current.d - g.distance(g.map[xCC][yCC], current))) << endl;
 			if (!g.map[xCC][yCC].track && abs(g.map[xCC][yCC].d - abs(current.d - g.distance(g.map[xCC][yCC], current))) < .01) {
 				moves.path.push_back(g.map[xCC][yCC]);
 				g.map[xCC][yCC].track = true;
