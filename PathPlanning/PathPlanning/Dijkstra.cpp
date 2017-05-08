@@ -1,8 +1,17 @@
 #include "Dijkstra.h"
 #include <cmath>
 #include <queue>
+#include <iostream>
 
 using namespace std;
+
+class Compare {
+
+public:
+	bool operator()(Coord a, Coord b) {
+		return a.d > b.d;
+	}
+};
 
 Dijkstra::Dijkstra()
 {
@@ -21,79 +30,85 @@ Dijkstra::Dijkstra(float x, float y)
 	goaly = y;
 }
 
-Path Dijkstra::calcPath(Grid g)
+Path Dijkstra::calcPath(Grid *gri)
 {
+	Grid g = *gri;
 	vector<int> goalInt = g.intPos(goalx, goaly);
-	if (goalInt[0] > g.map.size || goalInt[1] > g.map[0].size) {
+	if (goalInt[0] >= g.map.size() || goalInt[1] >= g.map[0].size()) {
 		goal = g.R2Pos;
 	}
 	else{
 		goal = g.map[goalInt[0]][goalInt[1]];
 	}
-	priority_queue <Coord, vector<Coord>, comp> queue;
-	g.R2Pos.dist = 0;
-	init = g.R2Pos;
+	priority_queue <Coord, vector<Coord>, Compare> queue;
+	vector<int> intCoords;
+	intCoords = g.intPos(g.R2Pos.x, g.R2Pos.y);
+	g.map[intCoords[0]][intCoords[1]].d = 0;
+	init = g.map[intCoords[0]][intCoords[1]];
 	if (init.obst) {
 		goal = init;
 	}
-	queue.push(g.R2Pos);
-	Coord head;
-	vector <Coord> neighbors;
-	vector<int> intCoords;
-	while (!(queue.top.equals(goal) || goal.equals(init))) {
+	queue.push(init);
+	Coord head = queue.top();
+	vector <vector<int>> neighbors;
+	while (!(head.equals(goal) || goal.equals(init))) {
 		head = queue.top();
 		queue.pop();
 		intCoords = g.intPos(head.x, head.y);
 		neighbors = g.adjCoords(intCoords[0], intCoords[1]);
-		for (Coord c : neighbors) {
-			if (c.dist == -1) {
-				if (c.obst) {
-					c.dist = numeric_limits<float>::infinity();
-					if (c.equals(goal)) {
+		for (vector<int> childcoords : neighbors) {
+			int xC = childcoords[0];
+			int yC = childcoords[1];
+			if (g.map[xC][yC].d == -1) {
+				if (g.map[xC][yC].obst) {
+					g.map[xC][yC].d = numeric_limits<float>::infinity();
+					if (g.map[xC][yC].equals(goal)) {
 						goal = init;
 					}
 				}
 				else {
-					c.dist = g.distance(c, head) + head.dist;
+					g.map[xC][yC].d = g.distance(g.map[xC][yC], head) + head.d;
 				}
-				queue.push(c);
+				queue.push(g.map[xC][yC]);
 			}
 			else {
-				c.dist = fmin(c.dist, c.dist + head.dist);
+				g.map[xC][yC].d = fmin(g.map[xC][yC].d, g.map[xC][yC].d + head.d);
 			}
 		}
-		head.track = true;
 	}
 	head = queue.top();
-	return givePath(g);
+	cout << "Exited calcPath method" << endl;
+	return givePath(&g);
 }
 
-Path Dijkstra::givePath(Grid g)
+Path Dijkstra::givePath(Grid *grid)
 {
+	Grid g = *grid;
 	Path moves;
-	moves.path.push_back(goal);
 	vector<int> intCoords = g.intPos(goal.x, goal.y);
-	vector<Coord> neighbors = g.adjCoords(intCoords[0], intCoords[1]);
+	goal = g.map[intCoords[0]][intCoords[1]];
+	moves.path.push_back(goal);
+	vector<vector<int>> neighbors = g.adjCoords(intCoords[0], intCoords[1]);
 	Coord current = goal;
-	current.track = false;
+	g.map[intCoords[0]][intCoords[1]].track = true;
+	int xCC;
+	int yCC;
 	while (!current.equals(init)) {
-		for (Coord c : neighbors) {
-			if (c.track && abs(c.dist - abs(current.dist - g.distance(c, current))) < .00001) {
-				moves.path.push_back(c);
-				c.track = false;
-				current = c;
+		for (vector<int> child : neighbors) {
+			xCC = child[0];
+			yCC = child[1];
+			cout << abs(g.map[xCC][yCC].d - abs(current.d - g.distance(g.map[xCC][yCC], current))) << endl;
+			if (!g.map[xCC][yCC].track && abs(g.map[xCC][yCC].d - abs(current.d - g.distance(g.map[xCC][yCC], current))) < .01) {
+				moves.path.push_back(g.map[xCC][yCC]);
+				g.map[xCC][yCC].track = true;
+				current = g.map[xCC][yCC];
 				break;
 			}
 		}
 		intCoords = g.intPos(current.x, current.y);
 		neighbors = g.adjCoords(intCoords[0], intCoords[1]);
-		current.track = false;
+		g.map[xCC][yCC].track = true;
 	}
 	return moves;
 }
 
-struct comp {
-	bool operator()(Coord a, Coord b) {
-		return a.dist < b.dist;
-	}
-};

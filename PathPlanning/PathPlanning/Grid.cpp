@@ -1,5 +1,6 @@
 #include "Grid.h"
 #include <cmath>
+#include <iostream>
 
 Grid::Grid()
 {
@@ -17,9 +18,9 @@ Grid::Grid(float w, float h, float scal, float startx, float starty)
 	scale = scal;
 	nheight = (int)(h / scal + .5);
 	nwidth = (int)(w / scal + .5);
-	vector<vector <Coord>> map;
-	Coord R2Pos(startx, starty);
-	vector <Obstacle> obstacles;
+	map = vector<vector <Coord>>(nheight, vector<Coord>(nwidth));
+	R2Pos = Coord (startx, starty);
+	obstacles = vector <Obstacle>();
 	vector<int> intInit = intPos(startx, starty);
 	for (int i = 0; i < nheight; i++) {
 		for (int j = 0; j < nwidth; j++) {
@@ -29,7 +30,7 @@ Grid::Grid(float w, float h, float scal, float startx, float starty)
 	map[intInit[0]][intInit[1]] = R2Pos;
 }
 
-void Grid::addObstacles(Obstacle obst)
+void Grid::addObstacle(Obstacle obst)
 {
 	obstacles.push_back(obst);
 	float top;
@@ -59,36 +60,61 @@ void Grid::addObstacles(Obstacle obst)
 	for (int t = coordsOne[0]; t <= coordsTwo[0]; t++) {
 		for (int u = coordsOne[1]; u <= coordsTwo[1]; u++) {
 			map[t][u].obst = true;
-
 		}
 	}
 }
 
-std::vector<Coord> Grid::adjCoords(int x, int y)
+std::vector<vector<int>> Grid::adjCoords(int x, int y)
 {
-	vector<Coord> adj;
+	vector<vector <int>> adj(0, vector<int>(2));
+	vector<int> coords;
+	
 	if (x + 1 < nheight) {
-		adj.push_back(map[x + 1][y]);
+		coords.push_back(x + 1);
+		coords.push_back(y);
+		adj.push_back(coords);
+		coords.clear();
 		if (y + 1 < nwidth) {
-			adj.push_back(map[x + 1][y + 1]);
+			coords.push_back(x + 1);
+			coords.push_back(y + 1);
+			adj.push_back(coords);
+			coords.clear();
 		}
 	}
 	if (y + 1 < nwidth) {
-		adj.push_back(map[x][y + 1]);
+		coords.push_back(x);
+		coords.push_back(y + 1);
+		adj.push_back(coords);
+		coords.clear();
 	}
 	if (x - 1 >= 0) {
-		adj.push_back(map[x - 1][y]);
+		coords.push_back(x - 1);
+		coords.push_back(y);
+		adj.push_back(coords);
+		coords.clear();
 		if (y + 1 < nwidth) {
-			adj.push_back(map[x - 1][y + 1]);
+			coords.push_back(x - 1);
+			coords.push_back(y + 1);
+			adj.push_back(coords);
+			coords.clear();
 		}
 		if (y - 1 >= 0) {
-			adj.push_back(map[x - 1][y - 1]);
+			coords.push_back(x - 1);
+			coords.push_back(y - 1);
+			adj.push_back(coords);
+			coords.clear();
 		}
 	}
 	if (y - 1 >= 0) {
-		adj.push_back(map[x][y - 1]);
+		coords.push_back(x);
+		coords.push_back(y - 1);
+		adj.push_back(coords);
+		coords.clear();
 		if (x + 1 < nheight) {
-			adj.push_back(map[x + 1][y - 1]);
+			coords.push_back(x + 1);
+			coords.push_back(y - 1);
+			adj.push_back(coords);
+			coords.clear();
 		}
 	}
 	return adj;
@@ -97,9 +123,8 @@ std::vector<Coord> Grid::adjCoords(int x, int y)
 std::vector<int> Grid::intPos(float x, float y)
 {
 	vector<int> pos;
-	pos[0] = (int)((y - (.5f) * scale) / scale + .5);
-	pos[1] = (int)((x - (.5f) * scale) / scale + .5);
-	return pos;
+	pos.push_back((int)((y - (.5f) * scale) / scale + .5));
+	pos.push_back((int)((x - (.5f) * scale) / scale + .5));
 	return pos;
 }
 

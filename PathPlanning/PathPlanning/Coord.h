@@ -3,6 +3,8 @@
 
 #include <string>
 
+using namespace std;
+
 class Coord
 {
 public:
@@ -13,13 +15,16 @@ public:
 	float x;
 	float y;
 	bool obst;
-	float dist;
+	float d;
 	bool track;
 
 	void setObst(bool val);
 
 	bool equals(Coord compare);
 	
+	string toString();
+
+	void setDistance(float &change, float val);
 };
 
 #endif

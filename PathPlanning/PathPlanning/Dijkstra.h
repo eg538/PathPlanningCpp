@@ -18,9 +18,9 @@ public:
 	~Dijkstra();
 	Dijkstra(float x, float y);
 
-	Path calcPath(Grid g);
+	Path calcPath(Grid *gri);
 
-	Path givePath(Grid g);
+	Path givePath(Grid *grid);
 };
 
 #endif

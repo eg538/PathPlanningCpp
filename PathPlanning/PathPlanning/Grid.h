@@ -24,9 +24,9 @@ public:
 	vector<vector<Coord>> map;
 	vector<Obstacle> obstacles;
 
-	void addObstacles(Obstacle obst);
+	void addObstacle(Obstacle obst);
 
-	vector<Coord> adjCoords(int x, int y);
+	vector<vector<int>> adjCoords(int x, int y);
 
 	vector<int> intPos(float x, float y);
 

@@ -2,7 +2,7 @@
 
 Path::Path()
 {
-	vector <Coord> path;
+	path = vector <Coord>();
 }
 
 
