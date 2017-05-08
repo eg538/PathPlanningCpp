@@ -6,7 +6,7 @@
 using namespace std;
 
 int main() {
-	Grid grid(100.f, 100.f, 1.f, 20.f, 20.f);
+	Grid grid(100.f, 100.f, 10.f, 20.f, 20.f);
 	Grid *g = &grid;
 	Coord position = grid.R2Pos;
 	Dijkstra d(99.f, 99.f);

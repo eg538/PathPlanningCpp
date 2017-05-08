@@ -17,6 +17,7 @@ public:
 	bool obst;
 	float d;
 	bool track;
+	float obstProb; //for vision information
 
 	void setObst(bool val);
 

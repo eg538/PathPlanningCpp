@@ -7,6 +7,7 @@ Coord::Coord()
 	obst = false;
 	d = -1;
 	track = false;
+	obstProb = 0;
 }
 
 
@@ -21,6 +22,7 @@ Coord::Coord(float xcoords, float ycoords)
 	obst = false;
 	d = -1;
 	track = false;
+	obstProb = 0;
 }
 
 void Coord::setObst(bool val)
