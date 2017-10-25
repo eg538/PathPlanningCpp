@@ -4,10 +4,15 @@ Coord::Coord()
 {
 	x = 0;
 	y = 0;
+	row = 0;
+	column = 0;
 	obst = false;
 	d = -1;
 	track = false;
 	obstProb = 0;
+	hDist = 0;
+	init = false;
+	goal = false;
 }
 
 
@@ -15,14 +20,45 @@ Coord::~Coord()
 {
 }
 
-Coord::Coord(float xcoords, float ycoords)
+//Coord::Coord(float xcoords, float ycoords)
+//{
+//	x = xcoords;
+//	y = ycoords;
+//	row = 0;
+//	column = 0;
+//	obst = false;
+//	d = -1;
+//	track = false;
+//	obstProb = 0;
+//	hDist = 0;
+//	init = false;
+//	goal = false;
+//}
+
+Coord::Coord(int intx, int inty)
 {
-	x = xcoords;
-	y = ycoords;
+	row = intx;
+	column = inty;
 	obst = false;
 	d = -1;
 	track = false;
 	obstProb = 0;
+	hDist = 0;
+	init = false;
+	goal = false;
+}
+
+Coord::Coord(vector<int> &intcoords)
+{
+	row = intcoords[0];
+	column = intcoords[1];
+	obst = false;
+	d = -1;
+	track = false;
+	obstProb = 0;
+	hDist = 0;
+	init = false;
+	goal = false;
 }
 
 void Coord::setObst(bool val)
@@ -30,14 +66,9 @@ void Coord::setObst(bool val)
 	obst = val;
 }
 
-bool Coord::equals(Coord compare)
-{
-	return x == compare.x && y == compare.y;
-}
-
 string Coord::toString()
 { 
-	return to_string(x) + ", " + to_string(y);
+	return row + ", " + column;
 }
 
 void Coord::setDistance(float &change, float val)

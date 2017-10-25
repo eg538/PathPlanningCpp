@@ -7,20 +7,20 @@
 
 class Dijkstra
 {
+
 private:
-	float goalx;
-	float goaly;
-	Coord goal;
-	Coord init;
+	Path path;
+	Grid *grid;
 
 public:
+	Dijkstra(Grid *g);
 	Dijkstra();
 	~Dijkstra();
-	Dijkstra(float x, float y);
 
-	Path calcPath(Grid *gri);
+	Path calcPath(float goalx, float goaly);
 
-	Path givePath(Grid *grid);
+	Path givePath(Grid &g, float goalx, float goaly);
+
 };
 
 #endif

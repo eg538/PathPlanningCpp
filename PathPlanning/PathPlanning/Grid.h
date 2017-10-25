@@ -20,8 +20,8 @@ public:
 	int nwidth;
 	float width;
 	float scale;
-	Coord R2Pos;
-	vector<vector<Coord>> map;
+	Coord *R2Pos;
+	vector<vector<Coord*>> map;
 	vector<Obstacle> obstacles;
 
 	void addObstacle(Obstacle obst);
@@ -30,9 +30,9 @@ public:
 
 	vector<int> intPos(float x, float y);
 
-	float distance(Coord a, Coord b);
+	float distance(Coord *a, Coord *b);
 
-	void updatePos(float x, float y);
+	void updatePos(int x, int y);
 };
 
 #endif

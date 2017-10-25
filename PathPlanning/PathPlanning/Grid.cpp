@@ -16,50 +16,48 @@ Grid::Grid(float w, float h, float scal, float startx, float starty)
 	width = w;
 	height = h;
 	scale = scal;
-	nheight = (int)(h / scal + .5);
+	nheight = (int)(h / scal + .5); 
 	nwidth = (int)(w / scal + .5);
-	map = vector<vector <Coord>>(nheight, vector<Coord>(nwidth));
-	R2Pos = Coord (startx, starty);
+	map = vector<vector <Coord*>>(nheight, vector <Coord*>(nwidth));
 	obstacles = vector <Obstacle>();
 	vector<int> intInit = intPos(startx, starty);
 	for (int i = 0; i < nheight; i++) {
 		for (int j = 0; j < nwidth; j++) {
-			map[i][j] = Coord((.5f) * scale + scale * ((float)(j)), (.5f) * scale + scale * ((float)(i)));
+			map[i][j] = new Coord(i, j);
 		}
 	}
-	map[intInit[0]][intInit[1]] = R2Pos;
+	R2Pos = map[intInit[0]][intInit[1]];
 }
 
 void Grid::addObstacle(Obstacle obst)
 {
 	obstacles.push_back(obst);
-	float top;
-	float bottom;
-	float left;
-	float right;
 	vector<int> coordsOne;
 	vector<int> coordsTwo;
-	top = obst.ypos - obst.height * .5f - 13.f;
-	if (top < 0) {
-		top = 0;
+	if (obst.top < 0) {
+		obst.top = 0;
 	}
-	bottom = obst.ypos + obst.height * .5f + 13.f;
-	if (bottom > height) {
-		bottom = height;
+	if (obst.bottom > height) {
+		obst.bottom = height;
 	}
-	left = obst.xpos - obst.width * .5f - 13.f;
-	if (left < 0) {
-		left = 0;
+	if (obst.left < 0) {
+		obst.left = 0;
 	}
-	right = obst.xpos + obst.width * .5f + 13.f;
-	if (right > width) {
-		right = width;
+	if (obst.right > width) {
+		obst.right = width;
 	}
-	coordsOne = intPos(left, top);
-	coordsTwo = intPos(right, bottom);
+	coordsOne = intPos(obst.left, obst.top);
+	coordsTwo = intPos(obst.right, obst.bottom);
+	for (int i = 0; i < map.size(); i++) {
+		for (int j = 0; j < map[0].size(); j++) {
+			map[i][j]->d = -1;
+			map[i][j]->track = false;
+			map[i][j]->init = false;
+		}
+	}
 	for (int t = coordsOne[0]; t <= coordsTwo[0]; t++) {
 		for (int u = coordsOne[1]; u <= coordsTwo[1]; u++) {
-			map[t][u].obst = true;
+			map[t][u]->obst = true;
 		}
 	}
 }
@@ -128,13 +126,16 @@ std::vector<int> Grid::intPos(float x, float y)
 	return pos;
 }
 
-float Grid::distance(Coord a, Coord b)
+float Grid::distance(Coord *a, Coord *b)
 {
-	return (float)sqrt(pow((a.x - b.x), 2) + pow((a.y - b.y), 2));
+	if (abs(a->row - b->row) > 0 && abs(a->column - b->column) > 0) {
+		return (float)sqrt(2*pow((scale), 2));
+	}
+	return scale;
 }
 
-void Grid::updatePos(float x, float y)
+void Grid::updatePos(int x, int y)
 {
-	R2Pos = Coord(x, y);
+	R2Pos =  map[x][y];
 }
 
